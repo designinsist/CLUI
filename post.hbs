@@ -1,87 +1,70 @@
 {{!< default}}
 
-<style>
-body {padding-top:60px}
-</style>
+{{! The comment above "< default" means - insert everything in this file into
+    the {body} of the default.hbs template, which contains our header/footer. }}
 
-	{{! Navbar for homepage }}
-	<nav class="navbar navbar-default navbar-fixed-top navbar-in-post" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="javascript:window.history.go(-1)"><i class="fa fa-chevron-left"></i> <i class="fa fa-home"></i> <span class="navbar-brand-sub"></span></a>
-		   </div>
-		</div>
-	</nav>
+<main class="content" role="main">
 
-<div class="container" role="main">
-	<div class="row">
-	
-    <article class="{{post_class}} clui-post col-md-12">
+    <article class="{{post_class}}">
 
         {{! Everything inside the #post tags pulls data from the post }}
         {{#post}}
 
         {{! Everything below outputs content of the the post which has been published }}
-        <span class="post-meta hide">
-			<time datetime="{{date format="YYYY-MM-DD"}}">{{date format='DD MMM YYYY'}}</time> 
-			<a class="clui-post-tag">{{#if tags}}{{tags}}{{/if}}</a>
-		</span>
 
-        <h1 class="post-title"><small><small>{{tags}}<br></small></small>{{{title}}}</h1>
+        <h1 class="post-title">{{{title}}}</h1>
 
         <section class="post-content">
             {{content}}
         </section>
 
         <footer class="post-footer">
-
+            <span class="post-meta"><span class="label label-default"><time datetime="{{date format='YYYY-MM-DD'}}">{{date format="DD MMM YYYY"}}</time></span> {{#if tags}}on <span class="label label-default">{{tags}}</span>{{/if}}</span>
             {{#if author}}
-                <section class="author hide">
+                <hr/>
+                <section class="author">
+                    {{#if author.image}}<div id="author-image" class="pull-left"><img src="{{author.image}}" alt="{{author.name}}" hight="100px" width="100px"/></div>{{/if}}
                     <h4>{{author.name}}</h4>
                     <p>{{author.bio}}</p>
                 </section>
             {{/if}}
-
-            <section class="share text-right">
-                <a href="http://v.t.sina.com.cn/share/share.php?title={{title}}&url={{url absolute="true"}}"
-                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <i class="fa fa-weibo fa-lg fa-fw"></i>
-                </a>
-                <a href="http://twitter.com/share?text={{title}}&url={{url absolute="true"}}"
-                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <i class="fa fa-twitter fa-lg fa-fw"></i>
-                </a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{url absolute="true"}}"
-                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <i class="fa fa-facebook fa-lg fa-fw"></i>
-                </a>
-                <a href="https://plus.google.com/share?url={{url absolute="true"}}"
-                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <i class="fa fa-google-plus fa-lg fa-fw"></i>
-                </a>
-            </section>
+            <hr/>
 
         </footer>
 
-        {{/post}}
-		
-		<div><hr /></div>
-		<div id="disqus_thread"></div>
-		<script type="text/javascript">
-		    var disqus_shortname = 'example'; // required: replace example with your forum shortname
-		    var disqus_identifier = '{{post.id}}'; // make sure to use the post.id as an identifier, otherwise disqus will use the pages url per default, which might be problematic...
+        <section class="comments">
+            <div class=disqusbox>
+            <div>
+                <p><strong>View or Post Comments</strong></p>
+            </div>
+            <div id="disqus_thread"><form onsubmit="my.loadDisqus();return false;" class=formBlock><input class="btn btn-default" type=submit value="Load Comments"></form></div>
+            <script>/* <![CDATA[ */
+            var disqus_shortname = "yourdisqus_shortname";
+            // provide the following in the template, if necessary
+            // var disqus_url = "http://yourghostblogdomainname/";
+            // var disqus_identifier = '{{id}}';
+            if (typeof my == "undefined") {
+              var my = ({});
+            }
+            my.loadDisqus = function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            };
+            /* ]]> */</script>
+            <noscript>Please enable javascript to <a rel="nofollow" href="http://disqus.com/?ref_noscript">discus this page, powered by Disqus.</a></noscript>
+            <style scoped=scoped>/* <![CDATA[ */
+            @media print{
+             .disqusbox{display:none}
+            }
+            /* ]]> */</style>
+            </div>
+        </section>
 
-		    /* * * DON'T EDIT BELOW THIS LINE * * */
-		    (function() {
-		        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-		        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-		        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-		    })();
-		</script>
-		<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-		<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-		
+        {{/post}}
+
     </article>
 
-	</div>
-</div>
+</main>
